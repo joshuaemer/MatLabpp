@@ -1,10 +1,10 @@
-%a)
-%Rewriting equations into Ax = b and solving for unknown T values parts 1-2
-%Initilize A
+
+
 %node_limit =6
 %node_limit = 11
 %node_limit = 21
-node_limit = 101
+node_limit = 101;
+%Initilize A
 A = zeros(node_limit,node_limit);
 b = zeros(node_limit,1);
 T0 = 200;
@@ -14,6 +14,7 @@ L =5;
 %Convert to meters
 L = L/100;
 base_thickness = 1;
+%Convert to meters
 base_thickness = base_thickness/100;
 delta_x = L/(node_limit-1);
 Tinf = 25;
@@ -47,7 +48,7 @@ end
 
 %formating to display nicely, solving with reduced row echilon function
 T_values = rref([A b]);
-T_values = T_values(:,node_limit+1)
+T_values = T_values(:,node_limit+1);
 
 % part 3
 w =1;
@@ -64,4 +65,37 @@ Qfin = Qfin*inside_Qfin;
 %fin efficiency
 Qmax = h*(2*w*L/cos(theta))*(T0 - Tinf);
 nfin = Qfin/Qmax;
+%Finding node locations by starting at 0 and increasing each node by
+%delta_x
+x = 0;
+for ii = 2:node_limit
+    x = [x;(ii-1)*delta_x];
+end
+%End of numerical solution
 
+%Anylitical solution
+I0 = besseli(0,x); 
+N  = 2*sqrt(h/(k*(base_thickness/2)));
+
+firstT = true;
+
+for xi = 1:node_limit
+    t= I0(xi,1)*(N*sqrt(L*(L-x(xi,1))))/(I0(xi,1)*N*sqrt(L^2))*(T0-Tinf)+Tinf;
+    
+    if(firstT)
+        T_Ana = [t];
+        firstT = false;
+    else
+        T_Ana = [T_Ana,t];
+
+    end
+end
+
+hold on
+plot(x,T_values,'g*:');
+plot(x,T_Ana,'ko-');
+ylabel('Temperature(C)');
+xlabel('Node Location (m)');
+title('Temperature vs Node Location');
+legend('Numerical T','Analytical T');
+hold off
