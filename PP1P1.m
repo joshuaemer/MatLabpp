@@ -75,21 +75,30 @@ end
 
 %Anylitical solution
 I0 = besseli(0,x); 
+I1 = besseli(1,x); 
 N  = 2*sqrt(h/(k*(base_thickness/2)));
 
 firstT = true;
 
 for xi = 1:node_limit
-    t= I0(xi,1)*(N*sqrt(L*(L-x(xi,1))))/(I0(xi,1)*N*sqrt(L^2))*(T0-Tinf)+Tinf;
+    t= I0(xi,1)*(N*sqrt(L*(L-x(xi,1))));
+    t = t/(I0(xi,1)*N*sqrt(L^2));
+    t = t*(T0-Tinf);
+    t=t+Tinf;
     
     if(firstT)
         T_Ana = [t];
         firstT = false;
     else
-        T_Ana = [T_Ana,t];
+        T_Ana = [T_Ana;t];
 
     end
 end
+
+
+
+
+
 
 hold on
 plot(x,T_values,'g*:');
