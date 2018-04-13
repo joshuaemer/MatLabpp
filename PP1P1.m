@@ -1,6 +1,6 @@
 
 
-%node_limit =6
+%node_limit =6;
 %node_limit = 11
 %node_limit = 21
 node_limit = 101;
@@ -57,7 +57,7 @@ Qfin = h*(w*delta_x/cos(theta));
 inside_Qfin = (T_values(1,1) - Tinf) + (T_values(node_limit,1) - Tinf);
 run_sum = 0;
 for m = 2:1:node_limit-1
-    run_sum = (T_values(m,1) - Tinf);
+    run_sum = run_sum + (T_values(m,1) - Tinf);
     
 end
 inside_Qfin= inside_Qfin + 2*run_sum;
@@ -74,26 +74,31 @@ end
 %End of numerical solution
 
 %Anylitical solution
-I0 = besseli(0,x); 
-I1 = besseli(1,x); 
+ 
 N  = 2*sqrt(h/(k*(base_thickness/2)));
 
-firstT = true;
+ztop =sqrt(L*(L-x)).*N; 
+zBottom = N*sqrt(L^2);
+T_Ana = besseli(0,ztop)./besseli(0,zBottom);
+T_Ana = T_Ana.*(T0-Tinf);
+T_Ana = T_Ana + Tinf;
 
-for xi = 1:node_limit
-    t= I0(xi,1)*(N*sqrt(L*(L-x(xi,1))));
-    t = t/(I0(xi,1)*N*sqrt(L^2));
-    t = t*(T0-Tinf);
-    t=t+Tinf;
-    
-    if(firstT)
-        T_Ana = [t];
-        firstT = false;
-    else
-        T_Ana = [T_Ana;t];
+%Analytical Qfin and nfin
+Qfin_Ana = 2*w*sqrt(h*k*(base_thickness/2))*(T0-Tinf);
+bess1 = (besseli(1,2*sqrt(h*L^2/(k*(base_thickness/2)))));
 
-    end
-end
+bess0 = (besseli(0,2*sqrt(h*L^2/(k*(base_thickness/2)))));
+
+Qfin_Ana = Qfin_Ana * (bess1 /bess0);
+
+Qmax_Ana = 2*h*sqrt(L^2+(base_thickness/2)^2)*(w*(T0-Tinf));
+
+nfin_Ana = Qfin_Ana/Qmax_Ana;
+
+fprintf('Numerical : Rate of Heat Transfer %f, Fin Efficiency %f\n',Qfin,nfin);
+fprintf('Analytical : Rate of Heat Transfer %f, Fin Efficiency %f\n',Qfin_Ana,nfin_Ana);
+
+
 
 
 
