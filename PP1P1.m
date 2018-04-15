@@ -9,7 +9,7 @@ A = zeros(node_limit,node_limit);
 b = zeros(node_limit,1);
 T0 = 200;
 %Constants
-k = 180;
+k = 60;
 L =5;
 %Convert to meters
 L = L/100;
@@ -105,11 +105,11 @@ fprintf('Analytical : Rate of Heat Transfer %f, Fin Efficiency %f\n',Qfin_Ana,nf
 
 
 
-hold on
-plot(x,T_values,'g*:');
-plot(x,T_Ana,'ko-');
+%hold on
+plot(x,T_values,'c.-');
+plot(x,T_Ana,'yh:');
 ylabel('Temperature(C)');
 xlabel('Node Location (m)');
 title('Temperature vs Node Location');
-legend('Numerical T','Analytical T');
-hold off
+%legend('Numerical T','Analytical T');
+%hold off

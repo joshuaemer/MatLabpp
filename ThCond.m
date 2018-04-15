@@ -1,4 +1,4 @@
-function [K] = ThCond(Temp, Name)
+function [K] = ThCond(Temp,Name)
 %Asks the user for an alloy name and computes the Thermal Conductivity
 %based on Temperature T, T can be an a scalar, a vector or a matrix
 T_shape =size(Temp);
@@ -99,7 +99,7 @@ switch Name
         end
     case 'Cu3'
         
-        upper = 773;
+        upper = 1143;
         for ii = 1:T_shape(1)
             for jj = 1:T_shape(2)
                 t = Temp(ii,jj);
