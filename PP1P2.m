@@ -35,3 +35,4 @@ grid on
 title('Thermal Conductivity of Al, Cu, St 1-3');
 ylabel('Thermal Conductivity [W/m.K]');
 xlabel('Temperature [K]');
+hold off
