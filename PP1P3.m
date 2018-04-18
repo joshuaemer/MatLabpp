@@ -53,7 +53,25 @@ while(n<100 && error>1E-8)
     error = norm(Tnew- Told);
     Told = Tnew;
 end
-%below line was used for part c
+%below line was used for part c and d
 %save('PP1P3.dat','x','Tnew','-ascii','-append')
+
+% part f
+T_values = Tnew;
+
+%heat transfer
+Qfin = h*(w*delta_x/cos(theta));
+inside_Qfin = (T_values(1,1) - Tinf) + (T_values(node_limit,1) - Tinf);
+run_sum = 0;
+for m = 2:1:node_limit-1
+    run_sum = run_sum + (T_values(m,1) - Tinf);
+    
+end
+inside_Qfin= inside_Qfin + 2*run_sum;
+Qfin = Qfin*inside_Qfin;
+%fin efficiency
+Qmax = h*(2*w*L/cos(theta))*(T0 - Tinf);
+nfin = Qfin/Qmax;
+fprintf('Rate of Heat Transfer %f, Fin Efficiency %f\n',Qfin,nfin); 
 
 
